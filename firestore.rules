@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── interview_history collection ──────────────────────────────────────
+    // Users can only read/write their own interview history entries
+    match /interview_history/{docId} {
+      // Read: only the owner
+      allow read: if request.auth != null
+                  && request.auth.uid == resource.data.userId;
+
+      // Create: authenticated user, userId must match their own UID
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+
+      // Update / Delete: only the owner
+      allow update, delete: if request.auth != null
+                            && request.auth.uid == resource.data.userId;
+    }
+
+    // ── interviews collection (legacy — keep read/write for existing data) ─
+    match /interviews/{docId} {
+      allow read: if request.auth != null
+                  && request.auth.uid == resource.data.userId;
+
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+
+      allow update, delete: if request.auth != null
+                            && request.auth.uid == resource.data.userId;
+    }
+  }
+}
