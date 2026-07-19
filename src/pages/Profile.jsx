@@ -7,7 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Navbar from '../components/Navbar';
 import {
   User, Mail, Trophy, BarChart2, Briefcase, Save,
-  LogOut, AlertCircle, CheckCircle
+  LogOut, AlertCircle, CheckCircle, Clock
 } from 'lucide-react';
 
 

@@ -4,6 +4,7 @@ import { useLocation, useParams, Link } from 'react-router-dom';
 import { fetchInterviewById } from '../services/interviewService';
 import Navbar from '../components/Navbar';
 import LoadingSpinner from '../components/LoadingSpinner';
+import FirebaseRulesAlert from '../components/FirebaseRulesAlert';
 import {
   CheckCircle, AlertCircle, Lightbulb, TrendingUp, TrendingDown,
   BarChart2, LayoutDashboard, RotateCcw, ChevronDown, ChevronUp, List, FileText,

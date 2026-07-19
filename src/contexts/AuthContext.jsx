@@ -24,6 +24,7 @@ export function AuthProvider({ children }) {
 
   // Sign up with email + password, and optionally set a display name
   async function signup(email, password, displayName) {
+    if (!auth) throw new Error('Firebase is not configured.');
     const result = await createUserWithEmailAndPassword(auth, email, password);
     if (displayName) {
       await updateProfile(result.user, { displayName });
@@ -32,22 +33,31 @@ export function AuthProvider({ children }) {
   }
 
   function login(email, password) {
+    if (!auth) throw new Error('Firebase is not configured.');
     return signInWithEmailAndPassword(auth, email, password);
   }
 
   function logout() {
+    if (!auth) return Promise.resolve();
     return signOut(auth);
   }
 
   function resetPassword(email) {
+    if (!auth) throw new Error('Firebase is not configured.');
     return sendPasswordResetEmail(auth, email);
   }
 
   async function updateUserProfile(data) {
+    if (!auth || !auth.currentUser) throw new Error('Not logged in.');
     return updateProfile(auth.currentUser, data);
   }
 
   useEffect(() => {
+    if (!auth) {
+      setCurrentUser(null);
+      setLoading(false);
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);
